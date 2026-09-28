@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Fireball",
+    "salePrice": 3,
+    "regularPrice": 5,
+    "imgSrc": "src/assets/images/fireball.svg"
+  },
+  {
+    "name": "Tequila",
+    "salePrice": 2,
+    "regularPrice": 4,
+    "imgSrc": "src/assets/images/tequila.svg"
+  },
+  {
+    "name": "Sour Puss",
+    "salePrice": 3,
+    "regularPrice": 5,
+    "imgSrc": "src/assets/images/sourpuss.svg"
+  }
+]

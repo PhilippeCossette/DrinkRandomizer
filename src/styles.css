@@ -1,0 +1,160 @@
+@import 'tailwindcss';
+/* Roboto, bundled with the app (works even if the bar's Wi-Fi is down) */
+@import '@fontsource-variable/roboto';
+
+@font-face {
+  font-family: 'Digital';
+  src: url('./assets/fonts/DS-DIGI.TTF') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* `dark:` utilities follow the .dark class (on <body> or <html>), not the OS setting */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Everything is sized in rem, and the root font size follows the screen.
+  So the whole layout scales up on a TV and down on a laptop, and keeps
+  the same proportions everywhere.
+  1920x1080 ≈ 18px · 1366x768 ≈ 13px · capped between 12px and 28px
+*/
+html {
+  font-size: clamp(12px, calc(0.6vw + 0.6vh), 28px);
+}
+
+/* ---------------------------------------------------------------------------
+   THEME
+   Light is the default. Add the class "dark" to <body> for the dark theme:
+     document.body.classList.toggle('dark')
+   Every color below switches automatically.
+--------------------------------------------------------------------------- */
+:root {
+  /* surfaces */
+  --page: #eeeeea; /* page background */
+  --surface: #ffffff; /* cards */
+  --surface-raised: #ffffff; /* the main timer card */
+  --sunken: #f5f5f2; /* panels inside a card (chart, images) */
+  --line: #e4e4df; /* borders and dividers */
+
+  /* text */
+  --ink: #141414; /* main text, numbers */
+  --ink-soft: #62625d; /* secondary text */
+  --ink-faint: #8f8f89; /* hints, chart axis */
+
+  /* brand accent (logo yellow) */
+  --accent: #ffda48; /* logo yellow */
+  --accent-ink: #1c1800; /* text on the accent */
+  --accent-soft: #fff5d1; /* tinted background */
+  --accent-strong: #8a6700; /* accent as text on light surfaces */
+
+  /* status colors: text + tinted background (badges, chart, alerts) */
+  --danger: #e5484d;
+  --danger-soft: #fdecec;
+  --success: #24945a;
+  --success-soft: #e4f5eb;
+  --warning: #dd7412;
+  --warning-soft: #fdefe1;
+  --neutral: #62625d;
+  --neutral-soft: #efefeb;
+
+  --shadow-card: 0 1px 2px rgb(20 20 20 / 0.04), 0 1px 1px rgb(20 20 20 / 0.02);
+  --shadow-float: 0 12px 32px rgb(20 20 20 / 0.12), 0 2px 6px rgb(20 20 20 / 0.06);
+
+  color-scheme: light;
+}
+
+.dark {
+  --page: #0c0d0f;
+  --surface: #16171a;
+  --surface-raised: #202125; /* a bit lighter than the other cards */
+  --sunken: #1d1e22;
+  --line: #29292e;
+
+  --ink: #f4f4f1;
+  --ink-soft: #a3a3a0;
+  --ink-faint: #6f6f72;
+
+  --accent: #ffda48; /* logo yellow */
+  --accent-ink: #1c1800;
+  --accent-soft: rgb(255 212 59 / 0.12);
+  --accent-strong: #ffda48;
+
+  --danger: #ff6369;
+  --danger-soft: rgb(255 99 105 / 0.14);
+  --success: #3ccf86;
+  --success-soft: rgb(60 207 134 / 0.14);
+  --warning: #ffa34d;
+  --warning-soft: rgb(255 163 77 / 0.14);
+  --neutral: #a3a3a0;
+  --neutral-soft: rgb(255 255 255 / 0.07);
+
+  --shadow-card: none;
+  --shadow-float: 0 12px 32px rgb(0 0 0 / 0.5), 0 2px 6px rgb(0 0 0 / 0.3);
+
+  color-scheme: dark;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+/* Tailwind classes for the theme colors (bg-surface, text-ink, border-line...) */
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-sunken: var(--sunken);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-strong: var(--accent-strong);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-neutral: var(--neutral);
+  --color-neutral-soft: var(--neutral-soft);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-float: var(--shadow-float);
+}
+
+@theme {
+  /* fonts: Roboto everywhere, except the digital font on the countdowns */
+  --font-sans: 'Roboto Variable', 'Roboto', system-ui, sans-serif;
+  --font-digital: 'Digital', monospace;
+
+  /* spacing: one padding for every card, one gap between cards */
+  --spacing-tile: 1.5rem; /* p-tile, px-tile... inside every card */
+  --spacing-bento: 1rem; /* gap-bento, p-bento: between cards and around the page */
+  --spacing-tape: 3rem; /* height of the ticker at the bottom */
+
+  /* radius */
+  --radius-tile: 1.5rem; /* rounded-tile: every card */
+  --radius-inner: 1rem; /* rounded-inner: panels and images inside a card */
+
+  /* type scale: use these everywhere instead of text-sm / text-4xl... */
+  --text-label: 0.85rem; /* small secondary text */
+  --text-body: 1.05rem; /* regular text */
+  --text-chip: 0.95rem; /* badges */
+  --text-card-title: 1.15rem; /* card titles */
+  --text-subheading: 1.5rem; /* secondary lines */
+  --text-heading: 2.4rem; /* drink and shot names */
+  --text-heading--line-height: 1.1;
+  --text-price: 5rem; /* shot price */
+  --text-price--line-height: 1;
+  --text-display: 6.5rem; /* big titles */
+  --text-display--line-height: 0.95;
+  --text-hero: 10rem; /* the drink's crash price */
+  --text-hero--line-height: 0.85;
+}

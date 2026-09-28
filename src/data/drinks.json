@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Gin Tonic",
+    "salePrice": 5,
+    "regularPrice": 9,
+    "imgSrc": "src/assets/images/gin_tonic.svg"
+  },
+  {
+    "name": "Sol",
+    "salePrice": 5,
+    "regularPrice": 7.5,
+    "imgSrc": "src/assets/images/sol.svg"
+  },
+  {
+    "name": "Rhum & Coke",
+    "salePrice": 5,
+    "regularPrice": 9,
+    "imgSrc": "src/assets/images/rhum_coke.svg"
+  },
+  {
+    "name": "Margarita",
+    "salePrice": 9,
+    "regularPrice": 12,
+    "imgSrc": "src/assets/images/margarita.svg"
+  },
+  {
+    "name": "Paloma",
+    "salePrice": 10,
+    "regularPrice": 13,
+    "imgSrc": "src/assets/images/paloma.svg"
+  },
+  {
+    "name": "Mexican Mule",
+    "salePrice": 10,
+    "regularPrice": 13,
+    "imgSrc": "src/assets/images/mexican_mule.svg"
+  }
+]
