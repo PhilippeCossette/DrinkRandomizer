@@ -1,6 +1,5 @@
 // Main countdown card (colors change with the time left).
 
-import { motion, useReducedMotion } from 'motion/react'
 import CardTitle from '#/components/ui/CardTitle'
 import { TIMER_TOTAL_MINUTES } from '#/lib/config'
 import { pad } from '#/lib/format'
@@ -16,8 +15,6 @@ type Props = {
 // Big countdown. The digits change color with the time left:
 // green, then orange (last 40%), then red (last 20%).
 export default function TimerDisplay({ minutes, seconds }: Props) {
-  const reduceMotion = useReducedMotion() ?? false
-
   const totalSeconds = TIMER_TOTAL_MINUTES * 60
   const remainingSeconds = minutes * 60 + seconds
   const ratio = Math.max(0, remainingSeconds / totalSeconds) // 1 = just started, 0 = done
@@ -43,13 +40,12 @@ export default function TimerDisplay({ minutes, seconds }: Props) {
         >
           <Digit value={m1} />
           <Digit value={m2} />
-          <motion.span
-            className="mt-[-0.1em] px-[0.04em]"
-            animate={reduceMotion || done ? { opacity: 1 } : { opacity: [1, 0.25, 1] }}
-            transition={{ duration: 1, ease: 'easeInOut', repeat: Infinity }}
+          {/* blinking colon (Tailwind animate-pulse, one blink per second) */}
+          <span
+            className={`mt-[-0.1em] px-[0.04em] ${done ? '' : 'animate-pulse [animation-duration:1s] motion-reduce:animate-none'}`}
           >
             :
-          </motion.span>
+          </span>
           <Digit value={s1} />
           <Digit value={s2} />
         </div>

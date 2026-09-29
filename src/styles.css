@@ -58,7 +58,8 @@ html {
   --neutral-soft: #efefeb;
 
   --shadow-card: 0 1px 2px rgb(20 20 20 / 0.04), 0 1px 1px rgb(20 20 20 / 0.02);
-  --shadow-float: 0 12px 32px rgb(20 20 20 / 0.12), 0 2px 6px rgb(20 20 20 / 0.06);
+  --shadow-float:
+    0 12px 32px rgb(20 20 20 / 0.12), 0 2px 6px rgb(20 20 20 / 0.06);
 
   color-scheme: light;
 }
@@ -90,6 +91,39 @@ html {
 
   --shadow-card: none;
   --shadow-float: 0 12px 32px rgb(0 0 0 / 0.5), 0 2px 6px rgb(0 0 0 / 0.3);
+
+  color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------------------
+   LA GRANDE DÉPRESSION
+   While the event is on, the page adds the class "depression" to <body>:
+   everything turns deep red (works over the light and dark themes).
+   The logo yellow stays for the prices.
+--------------------------------------------------------------------------- */
+.depression {
+  --page: #0e0304;
+  --surface: #1a0708;
+  --surface-raised: #240a0c; /* the banner */
+  --sunken: #230b0d;
+  --line: #3f1519;
+
+  --ink: #fff1f1;
+  --ink-soft: #d9a3a7;
+  --ink-faint: #9a5c61;
+
+  --accent: #ffda48;
+  --accent-ink: #1c1800;
+  --accent-soft: rgb(255 212 59 / 0.12);
+  --accent-strong: #ffda48;
+
+  --danger: #ff4d55;
+  --danger-soft: rgb(255 77 85 / 0.16);
+  --neutral: #d9a3a7;
+  --neutral-soft: rgb(255 120 120 / 0.08);
+
+  --shadow-card: none;
+  --shadow-float: 0 12px 32px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.35);
 
   color-scheme: dark;
 }

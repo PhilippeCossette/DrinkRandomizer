@@ -1,8 +1,8 @@
-import { IconGlass } from '@tabler/icons-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { SHOT_CHANCE } from '#/lib/config'
 import { ease } from '#/lib/easing'
 import { SHOT_PLACEHOLDER } from '#/lib/images'
+import DrawPips from '#/components/shot/DrawPips'
 
 // A calm, almost flat market line (viewBox 0 0 100 40)
 const FLAT_LINE =
@@ -40,7 +40,9 @@ export default function ShotEmpty() {
               strokeLinecap="round"
               initial={{ pathLength: reduceMotion ? 1 : 0, opacity: 0.6 }}
               animate={
-                reduceMotion ? undefined : { pathLength: [0, 1, 1], opacity: [0.6, 0.6, 0] }
+                reduceMotion
+                  ? undefined
+                  : { pathLength: [0, 1, 1], opacity: [0.6, 0.6, 0] }
               }
               transition={{
                 duration: 4,
@@ -52,22 +54,22 @@ export default function ShotEmpty() {
             />
           </svg>
 
-          {/* radar pulses: two rings, offset */}
-          {!reduceMotion &&
-            [0, 1.3].map((delay) => (
-              <motion.span
-                key={delay}
-                className="absolute h-[46%] w-[46%] rounded-full border border-ink-faint/50"
-                initial={{ scale: 0.6, opacity: 0 }}
-                animate={{ scale: [0.6, 1.9], opacity: [0.6, 0] }}
-                transition={{ duration: 2.6, ease: 'easeOut', repeat: Infinity, delay }}
-              />
-            ))}
+          {/* radar pulses: two rings with Tailwind animate-ping, the second one offset */}
+          {['[animation-delay:0s]', '[animation-delay:1.3s]'].map((delay) => (
+            <span
+              key={delay}
+              className={`absolute h-[46%] w-[46%] animate-ping rounded-full border-2 border-ink-faint/60 [animation-duration:2.6s] motion-reduce:hidden ${delay}`}
+            />
+          ))}
 
           {/* the shot, floating gently */}
           <motion.span
             className="relative flex justify-center"
-            animate={reduceMotion ? undefined : { y: [0, -4, 0], rotate: [0, -3, 0, 3, 0] }}
+            animate={
+              reduceMotion
+                ? undefined
+                : { y: [0, -4, 0], rotate: [0, -3, 0, 3, 0] }
+            }
             transition={{ duration: 5, ease: 'easeInOut', repeat: Infinity }}
           >
             <img
@@ -89,37 +91,17 @@ export default function ShotEmpty() {
             Aucun shooter
           </motion.h3>
 
-          {/* odds: one glass per chance, a highlight sweeps across them like a draw */}
+          {/* odds: one glass per chance, with a fake draw picking one in a loop */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5, ease }}
             className="flex flex-col gap-2"
           >
-            <div className="flex items-center gap-[min(0.5rem,1.5cqw)]" aria-hidden>
-              {Array.from({ length: pips }, (_, i) => (
-                <motion.span
-                  key={i}
-                  className={`grid h-[min(2.2rem,7.5cqw)] w-[min(2.2rem,7.5cqw)] place-items-center rounded-[0.6rem] ${
-                    i === 0 ? 'bg-accent-soft text-accent-strong' : 'bg-neutral-soft text-ink-faint'
-                  }`}
-                  animate={
-                    reduceMotion ? undefined : { opacity: [0.5, 1, 0.5], scale: [1, 1.1, 1] }
-                  }
-                  transition={{
-                    duration: 0.6,
-                    delay: i * 0.3,
-                    repeat: Infinity,
-                    repeatDelay: Math.max(0, (pips - 2) * 0.3),
-                    ease: 'easeInOut',
-                  }}
-                >
-                  <IconGlass className="h-[58%] w-[58%]" stroke={2} />
-                </motion.span>
-              ))}
-            </div>
+            <DrawPips count={pips} />
             <p className="text-body text-ink-soft">
-              <span className="font-medium text-ink">1 chance sur {odds}</span> au prochain tirage
+              <span className="font-medium text-ink">1 chance sur {odds}</span>{' '}
+              au prochain tirage
             </p>
           </motion.div>
         </div>

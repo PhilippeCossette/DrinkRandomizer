@@ -6,7 +6,7 @@ import { ease } from '#/lib/easing'
 import { formatPrice } from '#/lib/format'
 import { isOnSale } from '#/lib/pricing'
 import type { Drink } from '#/schema/drinks'
-import { imageUrl } from '#/lib/images'
+import { useImageUrl } from '#/hooks/useImageUrl'
 
 type Props = {
   width: number // px
@@ -16,6 +16,7 @@ type Props = {
 }
 
 export default function ReelCard({ width, drink, landed, isWinner }: Props) {
+  const src = useImageUrl(drink.imgSrc) // stays the same while this card is shown
   const highlighted = landed && isWinner
 
   return (
@@ -30,14 +31,16 @@ export default function ReelCard({ width, drink, landed, isWinner }: Props) {
         }
         transition={{ duration: 0.6, ease }}
         className={`relative flex h-full flex-col overflow-hidden rounded-tile border-2 bg-surface p-[0.6rem] shadow-card transition-[border-color,box-shadow] duration-500 ${
-          highlighted ? 'border-accent shadow-[0_0_0_6px_var(--accent-soft)]' : 'border-line'
+          highlighted
+            ? 'border-accent shadow-[0_0_0_6px_var(--accent-soft)]'
+            : 'border-line'
         }`}
       >
         {/* image panel */}
         <div className="relative min-h-0 flex-1 overflow-hidden rounded-inner bg-sunken">
           <div className="absolute inset-0 p-3">
             <img
-              src={imageUrl(drink.imgSrc)}
+              src={src}
               alt={drink.name}
               className="h-full w-full object-contain drop-shadow-[0_12px_16px_rgba(0,0,0,0.22)]"
             />
@@ -46,7 +49,10 @@ export default function ReelCard({ width, drink, landed, isWinner }: Props) {
           {/* % off, always visible */}
           {isOnSale(drink) && (
             <span className="absolute left-3 top-3 inline-flex">
-              <DiscountChip regularPrice={drink.regularPrice} salePrice={drink.salePrice} />
+              <DiscountChip
+                regularPrice={drink.regularPrice}
+                salePrice={drink.salePrice}
+              />
             </span>
           )}
         </div>

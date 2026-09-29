@@ -8,11 +8,16 @@ import Ticker from './Ticker'
 import { BLIPS } from './constants'
 
 type Props = {
-  drinks: Drink[]
+  drinks: Drink[] // what the ticker scrolls
   current: Drink
+  allCrashed?: boolean // La Grande Dépression: every item crashed in the ticker
 }
 
-export default function LiveBackground({ drinks, current }: Props) {
+export default function LiveBackground({
+  drinks,
+  current,
+  allCrashed = false,
+}: Props) {
   const reduceMotion = useReducedMotion() ?? false
 
   return (
@@ -21,10 +26,16 @@ export default function LiveBackground({ drinks, current }: Props) {
         <MarketGrid />
 
         {/* occasional market alerts, in the gaps around the cards */}
-        {!reduceMotion && BLIPS.map((b, i) => <Blip key={i} drinks={drinks} {...b} />)}
+        {!reduceMotion &&
+          BLIPS.map((b, i) => <Blip key={i} drinks={drinks} {...b} />)}
       </div>
 
-      <Ticker drinks={drinks} current={current} still={reduceMotion} />
+      <Ticker
+        drinks={drinks}
+        current={current}
+        still={reduceMotion}
+        allCrashed={allCrashed}
+      />
     </>
   )
 }

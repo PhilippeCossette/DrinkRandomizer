@@ -2,14 +2,9 @@
 // price to the sale price, with price labels and a dot riding the line.
 
 import { IconArrowDownRight } from '@tabler/icons-react'
-import {
-  animate,
-  motion,
-  useMotionValue,
-  useTransform,
-} from 'motion/react'
-import { useEffect, useId, useMemo, useRef, useState  } from 'react'
-import type {ReactNode} from 'react';
+import { animate, motion, useMotionValue, useTransform } from 'motion/react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { drawEase, ease } from '#/lib/easing'
 import { formatPrice } from '#/lib/format'
 import PricePill from './PricePill'
@@ -42,14 +37,18 @@ function priceTicks(from: number, to: number) {
   const yAt = (price: number) =>
     START[1] + ((price - from) * (TIP[1] - START[1])) / (to - from || 1)
   const top = from + ((20 - START[1]) * (to - from)) / (TIP[1] - START[1])
-  const bottom = from + ((VIEW_H - 20 - START[1]) * (to - from)) / (TIP[1] - START[1])
+  const bottom =
+    from + ((VIEW_H - 20 - START[1]) * (to - from)) / (TIP[1] - START[1])
 
   // pick the step that gives 3 to 6 lines
-  const step =
-    [0.25, 0.5, 1, 2, 5].find((s) => (top - bottom) / s <= 6) ?? 5
+  const step = [0.25, 0.5, 1, 2, 5].find((s) => (top - bottom) / s <= 6) ?? 5
 
   const ticks: { price: number; y: number }[] = []
-  for (let p = Math.ceil(Math.max(0, bottom) / step) * step; p <= top; p += step) {
+  for (
+    let p = Math.ceil(Math.max(0, bottom) / step) * step;
+    p <= top;
+    p += step
+  ) {
     ticks.push({ price: p, y: yAt(p) })
   }
   // skip lines that sit on the regular or crash price (their pills already say it)
@@ -108,8 +107,14 @@ export default function CrashChart({ from, to, still, children }: Props) {
       >
         <defs>
           <linearGradient id={`${id}-area`} x1={0} x2={0} y1={0} y2={1}>
-            <stop offset="0%" className="[stop-color:var(--danger)] [stop-opacity:0.18]" />
-            <stop offset="100%" className="[stop-color:var(--danger)] [stop-opacity:0]" />
+            <stop
+              offset="0%"
+              className="[stop-color:var(--danger)] [stop-opacity:0.18]"
+            />
+            <stop
+              offset="100%"
+              className="[stop-color:var(--danger)] [stop-opacity:0]"
+            />
           </linearGradient>
           <clipPath id={`${id}-reveal`}>
             <motion.rect x={0} y={0} height={VIEW_H} width={revealWidth} />
@@ -213,11 +218,7 @@ export default function CrashChart({ from, to, still, children }: Props) {
         style={{ left: dotLeft, top: dotTop }}
       >
         {done && !still && (
-          <motion.span
-            className="absolute inset-0 rounded-full bg-danger"
-            animate={{ scale: [1, 3.2], opacity: [0.5, 0] }}
-            transition={{ duration: 2, ease: 'easeOut', repeat: Infinity }}
-          />
+          <span className="absolute inset-0 animate-ping rounded-full bg-danger/60 [animation-duration:2s] motion-reduce:animate-none" />
         )}
       </motion.span>
 

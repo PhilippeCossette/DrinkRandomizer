@@ -44,12 +44,10 @@ export default function Blip({ drinks, delay, duration }: Props) {
         setCycle((c) => c + 1)
       }}
     >
-      {/* dot with a soft ping */}
+      {/* dot with a soft ping (Tailwind animate-ping) */}
       <span className="relative flex h-2 w-2">
-        <motion.span
-          className={`absolute inset-0 rounded-full ${dot}`}
-          animate={{ scale: [1, 2.6], opacity: [0.5, 0] }}
-          transition={{ duration: 1.8, ease: 'easeOut', repeat: Infinity }}
+        <span
+          className={`absolute inset-0 animate-ping rounded-full opacity-60 [animation-duration:1.8s] motion-reduce:animate-none ${dot}`}
         />
         <span className={`relative h-2 w-2 rounded-full ${dot}`} />
       </span>

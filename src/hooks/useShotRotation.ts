@@ -108,6 +108,24 @@ export function useShotRotation(shots: Drink[], durationSec: number) {
     drawRound()
   }
 
+  // Drops a shot that was picked but not revealed yet (its alert hasn't played).
+  // Used when La Grande Dépression starts: nothing may crash during the event.
+  function cancelPending() {
+    pendingRef.current = null
+    setPending(null)
+  }
+
+  // Throws away the current round and starts a fresh one right away,
+  // rolled like the first round (no alert). Used when La Grande Dépression ends.
+  function reset() {
+    cancelPending()
+    commit(
+      Math.random() < SHOT_CHANCE
+        ? pickShot(shots, lastShotRef.current)
+        : { shot: null },
+    )
+  }
+
   // Called by the page once the alert is done
   function finishShot() {
     const next = pendingRef.current
@@ -144,5 +162,7 @@ export function useShotRotation(shots: Drink[], durationSec: number) {
     resume: resumeTimer,
     skipShot,
     finishShot,
+    reset,
+    cancelPending,
   }
 }

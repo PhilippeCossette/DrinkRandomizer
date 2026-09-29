@@ -77,6 +77,35 @@ export function useDrinkRotation(drinks: Drink[], durationSec: number) {
     setPending({ drink: picked }) // the page shows the reel
   }
 
+  // Drops a drink that was picked but not revealed yet (its alert hasn't played).
+  // Used when La Grande Dépression starts: nothing may crash during the event.
+  function cancelPending() {
+    pendingRef.current = null
+    setPending(null)
+  }
+
+  // Starts a brand new round right away with a random drink, no alert or reel.
+  // Used when La Grande Dépression ends (its outro already made the show).
+  // Any drink still waiting for its alert is dropped: this one replaces it.
+  function startFresh() {
+    cancelPending()
+    const picked = pickRandomDrink(drinks, drinkNameRef.current)
+    const expiresAt = Date.now() + durationSec * 1000
+    saveRotation({
+      drinkName: picked.name,
+      expiresAt,
+      pausedRemainingMs: null,
+    })
+
+    drinkNameRef.current = picked.name
+    expiresAtRef.current = expiresAt
+    remainingRef.current = null
+
+    setDrink(picked)
+    setRound((r) => r + 1)
+    restart(new Date(expiresAt))
+  }
+
   // Called by the page when the reel has landed: the new round starts now
   function finishSpin() {
     const next = pendingRef.current
@@ -110,6 +139,8 @@ export function useDrinkRotation(drinks: Drink[], durationSec: number) {
     resume: resumeTimer,
     nextDrink,
     finishSpin,
+    startFresh,
+    cancelPending,
     pending,
   }
 }

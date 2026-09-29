@@ -5,7 +5,8 @@ import type { Drink } from '#/schema/drinks'
 import AnimatedPrice from '#/components/drink-reveal/AnimatedPrice'
 import OldPrice from '#/components/ui/OldPrice'
 import { isOnSale } from '#/lib/pricing'
-import { imageUrl } from '#/lib/images'
+import { useImageUrl } from '#/hooks/useImageUrl'
+import ShotCrashLine from '#/components/shot/ShotCrashLine'
 
 type Props = {
   shot: Drink
@@ -15,17 +16,19 @@ type Props = {
 // Narrow card: image on top, info under it. Wider card: side by side.
 // Sizes follow the card's own width (cqw), so it fits on a phone, a laptop or a TV.
 export default function ShotActive({ shot }: Props) {
+  const src = useImageUrl(shot.imgSrc) // stays the same while this card is shown
   const reduceMotion = useReducedMotion() ?? false
   const discounted = isOnSale(shot)
 
   return (
     <div className="@container h-full lg:[container-type:size]">
       <div className="flex h-full flex-col justify-center gap-4 p-[min(var(--spacing-tile),5cqw)] @lg:flex-row @lg:items-center @lg:gap-[min(var(--spacing-tile),4cqw)]">
-        {/* image */}
+        {/* image, with a mini crash chart drawing behind it */}
         <div className="relative aspect-square w-[30cqw] max-w-40 shrink-0 overflow-hidden rounded-inner bg-sunken @lg:w-[28cqw] lg:@lg:w-[min(34cqw,calc(100cqh-3rem))] lg:@lg:max-w-none">
+          <ShotCrashLine />
           <div className="absolute inset-0 p-[10%]">
             <motion.img
-              src={imageUrl(shot.imgSrc)}
+              src={src}
               alt={shot.name}
               className="h-full w-full object-contain drop-shadow-[0_8px_10px_rgba(0,0,0,0.25)]"
               animate={reduceMotion ? undefined : { y: [0, -4, 0] }}
