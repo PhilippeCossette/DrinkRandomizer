@@ -7,8 +7,9 @@ export const SHOT_ROUND_MINUTES = 15
 export const SHOT_CHANCE = 1 / 3
 
 // "La Grande Dépression": every drink and shot on sale at once.
-// Started from the staff menu; lasts as long as a normal drink round.
-export const DEPRESSION_MINUTES = TIMER_TOTAL_MINUTES
+// Started from the staff menu. How long it lasts, in minutes
+// (its own setting: change it without touching the drink rounds).
+export const DEPRESSION_MINUTES = 15
 
 // Sounds (see lib/sounds.ts)
 export const SOUNDS_ENABLED = true as boolean // false = no sound at all

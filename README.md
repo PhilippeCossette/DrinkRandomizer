@@ -140,7 +140,7 @@ flowchart LR
 
 **Good to know:**
 
-- The event lasts `DEPRESSION_MINUTES` (by default, the same as a normal round).
+- The event lasts `DEPRESSION_MINUTES` (25 by default), set separately from the drink rounds in `src/lib/config.ts`.
 - **Pause** works during the event, on its countdown. Skipping is hidden while everything is on sale. The pause button is disabled while a scene is playing.
 - **Refresh-safe.** A refresh during the event resumes it with the right time left. If the event ended while the page was closed, or a refresh happens during the outro, the page goes straight back to normal rounds.
 - **Nothing else crashes during the event.** A drink or shooter timer that runs out during the launch is dropped instead of playing its alert over the event page.
@@ -196,7 +196,7 @@ All timing and sound settings are in [`src/lib/config.ts`](src/lib/config.ts).
 | `TIMER_TOTAL_MINUTES` | `25` | Length of one drink round |
 | `SHOT_ROUND_MINUTES` | `15` | Time between two shooter draws |
 | `SHOT_CHANCE` | `1 / 3` | Probability that a draw puts a shooter on sale |
-| `DEPRESSION_MINUTES` | `TIMER_TOTAL_MINUTES` | Length of La Grande Dépression |
+| `DEPRESSION_MINUTES` | `25` | Length of La Grande Dépression, set on its own (independent from the drink rounds) |
 | `SOUNDS_ENABLED` | `true` | Master switch. Set it to `false` for no sound at all |
 | `SOUND_VOLUME` | `0.8` | Global volume, from `0` to `1` |
 | `SOUNDS` | all `true` | Turns individual sounds on or off: `alert` (siren), `spin` (reel ticks), `select` (win chime), `depression` (Grande Dépression crash and recovery sounds) |
