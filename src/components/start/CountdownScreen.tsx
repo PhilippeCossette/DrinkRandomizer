@@ -75,17 +75,6 @@ export default function CountdownScreen({
         transition={{ duration: 0.6, ease }}
         className="flex min-h-0 flex-1 flex-col items-center justify-center gap-[clamp(1rem,3vh,2rem)] text-center"
       >
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <Badge tone="neutral" icon={IconClockPlay}>
-            Ouverture du marché
-          </Badge>
-          <StateTag state={state} />
-        </div>
-
-        <h2 className="text-[min(var(--text-heading),8vw)] leading-tight font-semibold tracking-tight text-ink">
-          La session commence dans
-        </h2>
-
         {/* digits: same font and colors as the main timer (green → orange → red) */}
         <motion.div
           key={finalSeconds ? remaining : 'steady'}
@@ -111,10 +100,9 @@ export default function CountdownScreen({
           <Digit value={s1} />
           <Digit value={s2} />
         </motion.div>
-
-        <p className="max-w-160 text-subheading text-ink-soft">
-          À zéro, le premier verre et le premier shooter seront tirés au sort.
-        </p>
+        <h2 className="capitalize text-[min(var(--text-heading),8vw)] leading-tight font-semibold tracking-tight text-ink/60">
+          avant le premier crash
+        </h2>
       </motion.main>
     </section>
   )
