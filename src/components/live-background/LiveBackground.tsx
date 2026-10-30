@@ -9,14 +9,16 @@ import { BLIPS } from './constants'
 
 type Props = {
   drinks: Drink[] // what the ticker scrolls
-  current: Drink
+  current?: Drink // the drink on sale (none on the home screen)
   allCrashed?: boolean // La Grande Dépression: every item crashed in the ticker
+  blips?: boolean // floating market alerts (off on the countdown: they'd cover the digits)
 }
 
 export default function LiveBackground({
   drinks,
   current,
   allCrashed = false,
+  blips = true,
 }: Props) {
   const reduceMotion = useReducedMotion() ?? false
 
@@ -26,7 +28,8 @@ export default function LiveBackground({
         <MarketGrid />
 
         {/* occasional market alerts, in the gaps around the cards */}
-        {!reduceMotion &&
+        {blips &&
+          !reduceMotion &&
           BLIPS.map((b, i) => <Blip key={i} drinks={drinks} {...b} />)}
       </div>
 

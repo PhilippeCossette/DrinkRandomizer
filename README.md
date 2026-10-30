@@ -26,6 +26,7 @@ Every round, one drink "crashes" to a sale price, revealed with a case-opening r
 - [Overview](#overview)
 - [Features](#features)
 - [Screenshots](#screenshots)
+- [Starting a session](#starting-a-session)
 - [How a round works](#how-a-round-works)
 - [La Grande Dépression](#la-grande-dépression)
 - [Tech stack](#tech-stack)
@@ -97,6 +98,19 @@ The app runs fully client-side and needs no backend or database. The menu lives 
 | :---: | :---: |
 | <img src="docs/screenshots/grande-depression-outro.png" alt="Le marché se relève outro scene" /> | <img src="docs/screenshots/staff-menu.png" alt="Staff menu with the La Grande Dépression confirmation" /> |
 
+## Starting a session
+
+The app **always opens on a home screen**. It checks the browser for a saved session (one night of play):
+
+- **No session saved:** one button, **Nouvelle session**.
+- **A session is saved:** it shows what's in progress (the drink on sale and the time left, the opening countdown, or La Grande Dépression), with **Reprendre la session** and **Nouvelle session**. Starting a new session over an existing one asks for a second click to confirm, so a misclick can't wipe a game.
+
+**Nouvelle session** clears the saved game and starts a **full-screen opening countdown** (`START_COUNTDOWN_MINUTES`). Nothing is drawn yet. At zero, the regular crash alert ("Le premier verre est en chute") slides up over the countdown, the reel picks the first drink, and the first shooter is drawn.
+
+During the countdown, the top-right corner has two staff buttons: **Lancer maintenant** (skip to zero) and **Retour au menu**. A refresh during the countdown goes back to the home screen, and **Reprendre la session** continues it with the right time left.
+
+Clicking a home screen button also unlocks the sound, so there's no need to click the page again.
+
 ## How a round works
 
 ```mermaid
@@ -140,7 +154,7 @@ flowchart LR
 
 **Good to know:**
 
-- The event lasts `DEPRESSION_MINUTES` (25 by default), set separately from the drink rounds in `src/lib/config.ts`.
+- The event lasts `DEPRESSION_MINUTES` (15 by default), set separately from the drink rounds in `src/lib/config.ts`.
 - **Pause** works during the event, on its countdown. Skipping is hidden while everything is on sale. The pause button is disabled while a scene is playing.
 - **Refresh-safe.** A refresh during the event resumes it with the right time left. If the event ended while the page was closed, or a refresh happens during the outro, the page goes straight back to normal rounds.
 - **Nothing else crashes during the event.** A drink or shooter timer that runs out during the launch is dropped instead of playing its alert over the event page.
@@ -193,10 +207,11 @@ All timing and sound settings are in [`src/lib/config.ts`](src/lib/config.ts).
 
 | Constant | Default | Description |
 | --- | --- | --- |
+| `START_COUNTDOWN_MINUTES` | `10` | Opening countdown of a new session, before the first drink and shooter are drawn |
 | `TIMER_TOTAL_MINUTES` | `25` | Length of one drink round |
 | `SHOT_ROUND_MINUTES` | `15` | Time between two shooter draws |
 | `SHOT_CHANCE` | `1 / 3` | Probability that a draw puts a shooter on sale |
-| `DEPRESSION_MINUTES` | `25` | Length of La Grande Dépression, set on its own (independent from the drink rounds) |
+| `DEPRESSION_MINUTES` | `15` | Length of La Grande Dépression, set on its own (independent from the drink rounds) |
 | `SOUNDS_ENABLED` | `true` | Master switch. Set it to `false` for no sound at all |
 | `SOUND_VOLUME` | `0.8` | Global volume, from `0` to `1` |
 | `SOUNDS` | all `true` | Turns individual sounds on or off: `alert` (siren), `spin` (reel ticks), `select` (win chime), `depression` (Grande Dépression crash and recovery sounds) |
@@ -280,12 +295,14 @@ src/
 │   ├── app/                # Error and 404 screens
 │   ├── depression/         # La Grande Dépression: intro/outro scenes, event page, cards, timing
 │   ├── drink-reveal/       # Main "drink in crash" card: chart, image, animated price
+│   ├── game/               # The game screen: rounds, alerts, reel, La Grande Dépression
 │   ├── header/             # Page header with logo (title changes during the event)
 │   ├── layer-transition/   # Full-screen market alert between rounds
 │   ├── live-background/    # Market grid, price blips and the bottom ticker
 │   ├── menu/               # Hover menu: pause, skip, mute, Grande Dépression (+ popovers)
 │   ├── shot/               # Shooter card: active (mini crash chart) and empty (glass draw) states
 │   ├── spin-drinks/        # Case-opening reel
+│   ├── start/              # Home screen and the opening countdown
 │   ├── timer/              # Main countdown and its state (on time / soon / urgent)
 │   └── ui/                 # Design-system primitives: Badge, IconButton, OldPrice…
 ├── data/                   # drinks.json and shots.json (the menu)
@@ -298,12 +315,13 @@ src/
 │   ├── config.ts           # ⚙️ All tunable settings
 │   ├── sounds.ts           # Web Audio sounds and mute
 │   ├── images.ts           # Resolves JSON image paths; makes lighter in-memory copies
+│   ├── gameSession.ts      # The saved session: resume / new session, opening countdown
 │   ├── depressionStorage.ts  # Saves/loads La Grande Dépression
 │   ├── pricing.ts          # Discount calculations
 │   └── …                   # Round storage, random helpers, easing, formatting
 ├── routes/
 │   ├── __root.tsx          # HTML shell, theme class, global styles
-│   └── index.tsx           # The screen: layout and the order of every scene
+│   └── index.tsx           # Home screen → opening countdown → game
 ├── schema/                 # Drink type
 └── styles.css              # Design tokens, themes (light, dark, depression) and type scale
 ```
@@ -324,7 +342,7 @@ src/
 
 - **Client-only route.** The dashboard route sets `ssr: false`, because it depends on `localStorage`, timers and the Web Audio API. There's nothing to render on the server.
 - **Timers use deadlines, not ticks.** Each rotation (drinks, shooters, the event) stores an end timestamp, or the remaining milliseconds while paused, so time stays accurate even if the tab is throttled or reloaded.
-- **One scene at a time.** [`routes/index.tsx`](src/routes/index.tsx) orchestrates everything: the crash alert and reel, and the Grande Dépression intro and outro. A crash never starts while a scene plays or during the event. Time running out mid-scene is queued until the scene ends.
+- **One scene at a time.** [`components/game/Game.tsx`](src/components/game/Game.tsx) orchestrates the game: the crash alert and reel, and the Grande Dépression intro and outro. A crash never starts while a scene plays or during the event. Time running out mid-scene is queued until the scene ends.
 - **Scenes are timelines.** Each full-screen scene is one Motion `useAnimate` sequence driven by a `phase` (`cover` → `reveal` → `idle`), with all its timings in one constants file. The sounds use the same timings, so impacts land on the title words.
 - **Heavy work stays hidden.** Before a scene reveals the page underneath, that page is mounted a moment early, behind the opaque panels, so its first paint doesn't stutter the slide.
 - **Sounds without files.** Every sound is scheduled on an `AudioContext` and routed through a single gain "bus", which makes muting instant, even for a sound that's already playing.

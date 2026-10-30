@@ -9,7 +9,7 @@ import { TAPE_MIN_ITEMS, TAPE_SECONDS_PER_ITEM } from './constants'
 
 type Props = {
   drinks: Drink[]
-  current: Drink
+  current?: Drink // highlighted as crashed (none on the home screen)
   still: boolean
   allCrashed?: boolean // La Grande Dépression: every item shows its sale price
 }
@@ -27,7 +27,7 @@ export default function Ticker({
   const renderGroup = (copy: number) => (
     <div className="flex shrink-0 items-center" aria-hidden={copy === 1}>
       {group.map((d, i) => {
-        const crashed = allCrashed || d.name === current.name
+        const crashed = allCrashed || d.name === current?.name
         return (
           <span
             key={`${copy}-${i}`}

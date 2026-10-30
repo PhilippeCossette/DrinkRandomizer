@@ -1,3 +1,7 @@
+// Countdown shown when a new session starts, in minutes. The first drink and
+// the first shooter are only drawn when it reaches zero.
+export const START_COUNTDOWN_MINUTES = 25
+
 // Length of one drink round, in minutes
 export const TIMER_TOTAL_MINUTES = 25
 
@@ -13,7 +17,7 @@ export const DEPRESSION_MINUTES = 15
 
 // Sounds (see lib/sounds.ts)
 export const SOUNDS_ENABLED = true as boolean // false = no sound at all
-export const SOUND_VOLUME = 0.8 // 0 to 1
+export const SOUND_VOLUME = 0.6 // 0 to 1
 export const SOUNDS: Record<
   'alert' | 'spin' | 'select' | 'depression',
   boolean

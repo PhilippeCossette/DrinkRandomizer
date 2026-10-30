@@ -7,7 +7,7 @@
   },
   {
     "name": "Tequila",
-    "salePrice": 2,
+    "salePrice": 3,
     "regularPrice": 4,
     "imgSrc": "src/assets/images/tequila.svg"
   },
