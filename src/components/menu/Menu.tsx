@@ -84,7 +84,7 @@ export default function Menu({
       animate={open || touch ? 'visible' : 'hidden'}
       onHoverEnd={() => setOpen(null)}
       // invisible hover zone in the corner; the buttons slide down into it
-      className="fixed top-0 right-0 z-40 flex h-[6rem] w-[20rem] max-w-full justify-end p-bento"
+      className="fixed top-0 right-0 z-40 flex h-24 w-[20rem] max-w-full justify-end p-bento"
     >
       <motion.div
         variants={{

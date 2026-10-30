@@ -64,7 +64,7 @@ export default function CountdownScreen({
   const finalSeconds = remaining > 0 && remaining <= 10 // last 10 s: digits pulse
 
   return (
-    <section className="fixed inset-0 z-[45] flex flex-col gap-bento overflow-hidden p-bento pb-[calc(var(--spacing-bento)+var(--spacing-tape))]">
+    <section className="fixed inset-0 z-45 flex flex-col gap-bento overflow-hidden p-bento pb-[calc(var(--spacing-bento)+var(--spacing-tape))]">
       <LiveBackground drinks={drinks} blips={false} />
       {!locked && <StaffControls onStart={finish} onBack={onBack} />}
       <PageHeader />
@@ -112,7 +112,7 @@ export default function CountdownScreen({
           <Digit value={s2} />
         </motion.div>
 
-        <p className="max-w-[40rem] text-subheading text-ink-soft">
+        <p className="max-w-160 text-subheading text-ink-soft">
           À zéro, le premier verre et le premier shooter seront tirés au sort.
         </p>
       </motion.main>
@@ -140,7 +140,7 @@ function StaffControls({
       initial="hidden"
       whileHover="visible"
       animate={touch ? 'visible' : 'hidden'}
-      className="fixed top-0 right-0 z-[46] flex h-[6rem] w-[16rem] max-w-full justify-end p-bento"
+      className="fixed top-0 right-0 z-46 flex h-24 w-[16rem] max-w-full justify-end p-bento"
     >
       <motion.div
         variants={{

@@ -128,7 +128,7 @@ export default function StartScreen({ onResume, onNewSession }: Props) {
       <motion.section
         variants={item}
         transition={{ duration: 0.6, ease }}
-        className={`${cardClass} flex w-full max-w-[34rem] flex-col gap-5 p-tile text-left`}
+        className={`${cardClass} flex w-full max-w-136 flex-col gap-5 p-tile text-left`}
       >
         {hasSession && line ? (
           <div className="flex flex-col gap-3">
